@@ -13,7 +13,7 @@ export default function ShiftsList() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://192.168.x.x:5104/api/shift')
+    fetch('http://192.168.0.178:5104/api/shift')
       .then(res => res.json())
       .then(setShifts)
       .catch(err => console.error('Błąd fetchowania:', err))
