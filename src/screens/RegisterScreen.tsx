@@ -3,7 +3,6 @@ import { View, Text, TextInput, Button, Alert, TouchableOpacity, StyleSheet } fr
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 
-// Typy nawigacji (jeśli masz własne, podmień)
 type RootStackParamList = {
   Login: undefined;
   Register: undefined;
