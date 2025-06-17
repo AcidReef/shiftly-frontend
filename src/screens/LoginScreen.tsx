@@ -3,16 +3,18 @@ import { View, Text, TextInput, Button, Alert, TouchableOpacity, StyleSheet } fr
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../AppNavigator";
+import { useAuth } from "../AuthContext";
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, "Login">;
 
 export default function LoginScreen() {
   const navigation = useNavigation<NavigationProp>();
+  const { login } = useAuth();
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function login() {
+  async function handleLogin() {
     setLoading(true);
     try {
       const res = await fetch("http://172.20.10.10:5104/api/auth/login", {
@@ -22,6 +24,7 @@ export default function LoginScreen() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data || "Błąd logowania");
+      await login(data.token);
       Alert.alert("Sukces", "Zalogowano!");
       navigation.replace("Home");
     } catch (e: any) {
@@ -48,7 +51,7 @@ export default function LoginScreen() {
         secureTextEntry
         style={styles.input}
       />
-      <Button title={loading ? "Logowanie..." : "Zaloguj się"} onPress={login} disabled={loading} />
+      <Button title={loading ? "Logowanie..." : "Zaloguj się"} onPress={handleLogin} disabled={loading} />
       <TouchableOpacity onPress={() => navigation.replace("Register")} style={{ marginTop: 24 }}>
         <Text style={styles.link}>Nie masz konta? Zarejestruj się</Text>
       </TouchableOpacity>

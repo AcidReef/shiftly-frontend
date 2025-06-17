@@ -3,11 +3,13 @@ import { View, Text, Button, StyleSheet } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../AppNavigator";
+import { useAuth } from "../AuthContext";
 
 type HomeNavProp = NativeStackNavigationProp<RootStackParamList, "Home">;
 
 export default function HomeScreen() {
   const navigation = useNavigation<HomeNavProp>();
+  const { logout } = useAuth();
 
   return (
     <View style={styles.container}>
@@ -25,11 +27,13 @@ export default function HomeScreen() {
         title="Swap Request"
         onPress={() => navigation.navigate("SwapRequest")}
       />
-      {/* Na razie opcjonalnie: wyloguj */}
       <View style={{ marginTop: 40 }}>
         <Button
           title="Wyloguj"
-          onPress={() => navigation.replace("Login")}
+          onPress={() => {
+            logout();
+            navigation.replace("Login");
+          }}
         />
       </View>
     </View>
