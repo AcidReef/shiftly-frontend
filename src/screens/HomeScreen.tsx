@@ -9,11 +9,14 @@ type HomeNavProp = NativeStackNavigationProp<RootStackParamList, "Home">;
 
 export default function HomeScreen() {
   const navigation = useNavigation<HomeNavProp>();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+
+  const isManager = user?.role === "Manager";
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Witaj w Shiftly!</Text>
+      <Text style={styles.subtitle}>Zalogowany jako: {user?.userName} ({user?.role})</Text>
 
       <Button
         title="Moje zmiany"
@@ -27,6 +30,26 @@ export default function HomeScreen() {
         title="Swap Request"
         onPress={() => navigation.navigate("SwapRequest")}
       />
+
+      {/* Panel managera */}
+      {isManager && (
+        <View style={styles.managerPanel}>
+          <Text style={styles.managerTitle}>Panel managera</Text>
+          <Button
+            title="Zarządzaj grafikiem"
+            onPress={() => navigation.navigate("ManagerShift")}
+          />
+          <Button
+            title="Akceptuj urlopy"
+            onPress={() => navigation.navigate("ManagerLeaveRequest")}
+          />
+          <Button
+            title="Zgłoszenia zamian"
+            onPress={() => navigation.navigate("ManagerSwapRequest")}
+          />
+        </View>
+      )}
+
       <View style={{ marginTop: 40 }}>
         <Button
           title="Wyloguj"
@@ -42,5 +65,8 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", padding: 24 },
-  title: { fontSize: 22, fontWeight: "bold", marginBottom: 24, textAlign: "center" },
+  title: { fontSize: 22, fontWeight: "bold", marginBottom: 12, textAlign: "center" },
+  subtitle: { fontSize: 15, marginBottom: 18, textAlign: "center" },
+  managerPanel: { marginTop: 30 },
+  managerTitle: { fontWeight: "bold", fontSize: 16, marginBottom: 12, textAlign: "center" }
 });
